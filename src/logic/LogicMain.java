@@ -22,7 +22,7 @@ import dispatcher.HandlerDispatcher;
 
  */
 
-public class Manager {
+public class LogicMain {
 	
    private HandlerDispatcher handlerdispatcher=new HandlerDispatcher();
 	
@@ -31,9 +31,9 @@ public class Manager {
 	   return handlerdispatcher;
    }
    
-   private static Manager _instance;
+   private static LogicMain _instance;
 	
-   private Manager()
+   private LogicMain()
    {
 	   //配置处理handler
 	   Map<Integer,GameHandler> handleMap=new LinkedHashMap<Integer,GameHandler>();
@@ -42,16 +42,16 @@ public class Manager {
 	   handlerdispatcher.setHandlerMap(handleMap);
 	  
 	   //消息分发器开始处理
-	   handlerdispatcher.setMessageExecutor(Executors.newFixedThreadPool(10));
+	   handlerdispatcher.setMessageExecutor(Executors.newCachedThreadPool());
 	   new Thread(handlerdispatcher).start();;
      
    };
    
-   public static Manager getInstance()
+   public static LogicMain getInstance()
    {
 	   if(_instance==null)
 	   {
-		   _instance=new Manager();
+		   _instance=new LogicMain();
 	   }
 	   return _instance;
    }

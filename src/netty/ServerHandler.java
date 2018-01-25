@@ -2,7 +2,7 @@ package netty;
 
 import java.sql.Date;
 
-import logic.Manager;
+import logic.LogicMain;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -31,7 +31,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 		{
 		super.handlerAdded(ctx);
 
-		Manager.getInstance().getDispatcher().addMessageQueue(ctx,new MessageQueue());
+		LogicMain.getInstance().getDispatcher().addMessageQueue(ctx,new MessageQueue());
 		
 		logger.info("进来了一个连接:"+ctx.channel().id().toString());
 		
@@ -50,7 +50,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 		   super.handlerRemoved(ctx);
 	       
 		   //删除此链接的消息队列
-		   Manager.getInstance().getDispatcher().removeMessageQueue(ctx);
+		   LogicMain.getInstance().getDispatcher().removeMessageQueue(ctx);
 		   
 		   logger.info("删除了一个连接:"+ctx.channel().id().toString());
 		
@@ -68,7 +68,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 		
 		RequestMessage message=(RequestMessage)msg;
 		logger.info("reciver data:"+message.toString());	
-		Manager.getInstance().getDispatcher().addMessage(new GameRequest(ctx,message));
+		
+		LogicMain.getInstance().getDispatcher().addMessage(new GameRequest(ctx,message));
 		
 		
 	/*	ResponseMessage m=new ResponseMessage(1000,new byte[]{0xc,0xd});

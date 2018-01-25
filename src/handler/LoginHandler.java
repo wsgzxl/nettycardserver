@@ -10,7 +10,7 @@ import domain.GameRequest;
 @qq: 1357098586
 @version 创建时间：2018年1月23日 下午2:19:58 
 
-登录处理包
+登录处理包 username+password
 
  */
 

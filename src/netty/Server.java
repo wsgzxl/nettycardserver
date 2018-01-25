@@ -1,7 +1,7 @@
 package netty;
 
 
-import logic.Manager;
+import logic.LogicMain;
 import net.Heartbeat;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture; 
@@ -33,7 +33,7 @@ public class Server{
     public void start(int port)  throws Exception{
     	
     	logger.info("start server!");
-    	Manager.getInstance();
+    	LogicMain.getInstance();
     
     	//配置服务端的NIO线程组
         EventLoopGroup bossGroup = new NioEventLoopGroup();

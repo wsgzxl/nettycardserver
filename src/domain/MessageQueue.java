@@ -18,6 +18,7 @@ public class MessageQueue {
 	public MessageQueue()
 	{
 		this.requestQueue=new ConcurrentLinkedQueue<GameRequest>();
+		this.setRunning(false);
 	}
 	
 	public Queue<GameRequest> getRequestQueue()

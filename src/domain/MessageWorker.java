@@ -3,7 +3,7 @@ package domain;
 import java.util.Map;
 
 import handler.GameHandler;
-import logic.Manager;
+import logic.LogicMain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class MessageWorker implements Runnable{
 	private void handleMessageQueue()
 	{
 		int messageId=this.request.getRequestId();
-		Map<Integer,GameHandler> maphandlers=Manager.getInstance().getDispatcher().getHandlerMap();
+		Map<Integer,GameHandler> maphandlers=LogicMain.getInstance().getDispatcher().getHandlerMap();
 	    GameHandler handler=maphandlers.get(messageId);
 	    if(handler!=null)
 	    {

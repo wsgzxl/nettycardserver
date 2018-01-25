@@ -136,11 +136,13 @@ public class HandlerDispatcher implements Runnable {
 						if(this.messageExecutor!=null)
 						{
 						    this.messageExecutor.execute(messageWorker);
+						    messageQueue.setRunning(true);
 						}
 						else
 						{
 							logger.info("messageExecutor is null!");
 						}
+	
 					}
 				}
 			}catch(Exception ex)
