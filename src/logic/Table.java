@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,8 @@ public class Table {
    
 	private Logger logger=LoggerFactory.getLogger(getClass());
 	
-	private List<User> players=new ArrayList<User>(); //桌子上的人数
+	private ConcurrentHashMap<Integer,Table> players=new ConcurrentHashMap<Integer,Table>(); //桌子上的人数
 	
-	public List<User> getUsers()
-	{
-		return players;
-	}
 	
 	private Integer tableno=-1; //桌号
 	
@@ -58,7 +55,7 @@ public class Table {
 		}
 	}
 	
-	public void sendToAll(ResponseMessage message)
+	/*public void sendToAll(ResponseMessage message)
 	{
 		for(int i=0;i<players.size();i++)
 		{
@@ -70,6 +67,6 @@ public class Table {
 			}
 			ctx.writeAndFlush(message);
 		}
-	}
+	}*/
 	
 }

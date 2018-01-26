@@ -35,10 +35,13 @@ public class LogicMain {
 	
    private LogicMain()
    {
+	   
 	   //配置处理handler
 	   Map<Integer,GameHandler> handleMap=new LinkedHashMap<Integer,GameHandler>();
+	   
 	   handleMap.put(HandlerId.login.ordinal(), new LoginHandler());
 	   handleMap.put(HandlerId.exit.ordinal(), new ExitHandler());
+	 
 	   handlerdispatcher.setHandlerMap(handleMap);
 	  
 	   //消息分发器开始处理

@@ -2,6 +2,8 @@ package logic.Manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
 import net.ResponseMessage;
 import logic.User;
 
@@ -27,7 +29,7 @@ public class UserManager {
 		return _instance;
 	}
 	
-	private List<User> players=new ArrayList<User>();//所有玩家
+	private ConcurrentHashMap<Integer,User> players=new ConcurrentHashMap<Integer,User>();//所有玩家
 	
 	//发送消息给指定玩家
 	public void sendMessage(User user,ResponseMessage message)
@@ -52,5 +54,18 @@ public class UserManager {
 	    	players.get(i).getHandlerContext().writeAndFlush(message);
 	    }
 	}
+	
+	//添加用户
+	public  void addUser(User user)
+	{
+		 players.put(user.hashCode(),user);
+	}
+	
+	//删除用户
+	public  void removeUser(User user)
+	{
+		players.remove(user.hashCode());
+	}
+	
 	
 }
