@@ -10,8 +10,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
-import logic.LogicMain;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,19 +132,7 @@ public class HandlerDispatcher implements Runnable {
 				{
 					if((messageQueue!=null) && (messageQueue.size()>0) && (!messageQueue.isRunning()))
 					{
-						GameRequest request= (GameRequest)messageQueue.getRequestQueue().poll();
-						int messageId=request.getRequestId();
-						Map<Integer,GameHandler> maphandlers=LogicMain.getInstance().getDispatcher().getHandlerMap();
-					    GameHandler handler=maphandlers.get(messageId);
-					    if(handler!=null)
-					    {
-					    	handler.execute(request);
-					    }
-					    else
-					    {
-					    	logger.info("没有找到合适的处理程序!");
-					    }
-						/*MessageWorker messageWorker=new MessageWorker(messageQueue);
+						MessageWorker messageWorker=new MessageWorker(messageQueue);
 						if(this.messageExecutor!=null)
 						{
 						    this.messageExecutor.execute(messageWorker);
@@ -155,7 +141,8 @@ public class HandlerDispatcher implements Runnable {
 						else
 						{
 							logger.info("messageExecutor is null!");
-						}*/
+						}
+	
 					}
 				}
 			}catch(Exception ex)
