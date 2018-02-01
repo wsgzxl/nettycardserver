@@ -49,9 +49,9 @@ public class UserManager {
 	//发送给所有玩家
 	public void sendAll(ResponseMessage message)
 	{
-	    for(int i=0;i<players.size();i++)
-	    {
-	    	players.get(i).getHandlerContext().writeAndFlush(message);
+		for(User user : players.values())
+		{
+	    	user.getHandlerContext().writeAndFlush(message);
 	    }
 	}
 	

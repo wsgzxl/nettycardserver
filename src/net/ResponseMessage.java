@@ -1,6 +1,6 @@
 package net;
 
-import Core.Message;
+import core.Message;
 
 /*
 @author YHL

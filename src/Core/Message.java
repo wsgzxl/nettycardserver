@@ -1,4 +1,4 @@
-package Core;
+package core;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
  * @qq: 1357098586
  * @email: 1357098586@qq.com
  * 
- * 协议内容  包长度(4 bytes)+id(2 bytes)+data(byte[])
+ * 协议内容  包长�?4 bytes)+id(2 bytes)+data(byte[])
  * 
  * 收发消息都是Message
  */

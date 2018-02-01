@@ -14,9 +14,9 @@ import net.ResponseMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.Message;
 import domain.GameRequest;
 import domain.MessageQueue;
-import Core.Message;
 
 public class ServerHandler extends ChannelInboundHandlerAdapter{
 	

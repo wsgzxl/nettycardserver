@@ -1,7 +1,7 @@
 package domain;
 
+import core.Message;
 import net.RequestMessage;
-import Core.Message;
 import io.netty.channel.ChannelHandlerContext;
 
 /*

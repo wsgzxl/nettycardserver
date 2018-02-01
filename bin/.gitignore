@@ -1,2 +1,5 @@
-/logic/
-/Manager/
+/core/
+/domain/
+/net/
+/netty/
+/dispatcher/
