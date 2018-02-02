@@ -45,7 +45,8 @@ public class LogicMain {
 	   handlerdispatcher.setHandlerMap(handleMap);
 	  
 	   //消息分发器开始处理
-	   handlerdispatcher.setMessageExecutor(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
+	   handlerdispatcher.setMessageExecutor(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()*2));
+	 
 	   new Thread(handlerdispatcher).start();;
      
    };

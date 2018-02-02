@@ -3,6 +3,7 @@ package logic.Manager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.ResponseMessage;
 import logic.User;
@@ -13,7 +14,7 @@ import logic.User;
 
 public class UserManager {
 
-	private static UserManager _instance;
+	private static UserManager _instance=new UserManager();
 	
 	private UserManager()
 	{
@@ -22,10 +23,6 @@ public class UserManager {
 	
 	public static UserManager getInstance()
 	{
-		if(null==_instance)
-		{
-			_instance=new UserManager();
-		}
 		return _instance;
 	}
 	
@@ -67,5 +64,10 @@ public class UserManager {
 		players.remove(user.hashCode());
 	}
 	
+	//获取用户数量
+	public int getUserCount()
+	{
+		return players.size();
+	}
 	
 }
