@@ -16,20 +16,26 @@ import net.ResponseMessage;
  * 桌子类
  */
 
-public class Table {
+public class Room {
    
 	private Logger logger=LoggerFactory.getLogger(getClass());
 	
-	private ConcurrentHashMap<Integer,Table> players=new ConcurrentHashMap<Integer,Table>(); //桌子上的人数
+	private ConcurrentHashMap<Integer,User> users=new ConcurrentHashMap<Integer,User>(); //桌子上的人数
 	
 	
-	private Integer tableno=-1; //桌号
+	private Integer roomno=-1; //桌号
 	
-	public Integer getTableno()
+	/*
+	 * 返回房间号
+	 */
+	public Integer getRoomNo()
 	{
-		return tableno;
+		return roomno;
 	}
 	
+	/*
+	 * 发给某个人
+	 */
 	public void sendToUser(User user,ResponseMessage message)
 	{
 		ChannelHandlerContext ctx=user.getHandlerContext();
@@ -41,6 +47,9 @@ public class Table {
 		user.getHandlerContext().writeAndFlush(message);
 	}
 	
+	/*
+	 * 发给一些人
+	 */
 	public void sendToUsers(User[] users,ResponseMessage message)
 	{
 		for(int i=0;i<users.length;i++)
@@ -55,18 +64,24 @@ public class Table {
 		}
 	}
 	
-	/*public void sendToAll(ResponseMessage message)
+	/*
+	 * 发送给房间的所有人
+	 */
+	public void sendAll(ResponseMessage message)
 	{
-		for(int i=0;i<players.size();i++)
+		for(User user:users.values())
 		{
-			ChannelHandlerContext ctx=players.get(i).getHandlerContext();
-			if(null==ctx)
-			{
-				logger.info("ctx is null!");
-				return;
-			}
-			ctx.writeAndFlush(message);
+			user.getHandlerContext().writeAndFlush(message);
 		}
-	}*/
+	}
+	
+	/**
+	 * 添加玩家
+	 * @param user
+	 */
+	public void addUser(User user)
+	{
+		users.put(user.hashCode(), user);
+	}
 	
 }

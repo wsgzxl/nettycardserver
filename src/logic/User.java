@@ -10,11 +10,11 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class User {
    
-	 private int id=-1;//玩家ID
+	 private int weixinid=-1;//玩家微信ID
 	 
 	 public int getId()
 	 {
-		 return id;
+		 return weixinid;
 	 }
 	 
 	 private String name="";//玩家姓名
@@ -38,11 +38,11 @@ public class User {
 		 return ctx;
 	 }
 	 
-	 private Table table=null;//玩家所在桌子
+	 private Room room=null;//玩家所在房间
 	 
-	 public Table getTable()
+	 public Room getRoom()
 	 {
-		 return table;
+		 return room;
 	 }
 	 
 }

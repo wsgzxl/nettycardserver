@@ -48,10 +48,13 @@ public class Message {
 		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 		DataOutputStream output = new DataOutputStream(byteStream);
 		output.writeShort(this.id);
-		for(int i=0;i<this.data.length;i++) {
-			output.writeByte(this.data[i]);
+		if(this.data!=null)
+		{
+		   for(int i=0;i<this.data.length;i++) {
+			  output.writeByte(this.data[i]);
+		   }
 		}
-		output.flush();
+	    output.flush();
 		return byteStream.toByteArray();
 	}
 	

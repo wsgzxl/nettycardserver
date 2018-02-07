@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.ResponseMessage;
 import logic.User;
 
@@ -14,7 +17,9 @@ import logic.User;
 
 public class UserManager {
 
-	private static UserManager _instance=new UserManager();
+	private Logger logger=LoggerFactory.getLogger(getClass());
+	
+	private static UserManager _instance=new UserManager();//防止并发带来的锁，所以直接new
 	
 	private UserManager()
 	{

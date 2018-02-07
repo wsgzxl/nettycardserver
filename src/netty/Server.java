@@ -16,7 +16,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import constant.HandlerId;
+import constant.RequestHandlerId;
 import dispatcher.HandlerDispatcher;
 
 public class Server{

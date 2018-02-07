@@ -1,5 +1,6 @@
 package logic;
 
+import handler.CreateRoomHandler;
 import handler.ExitHandler;
 import handler.GameHandler;
 import handler.LoginHandler;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import constant.HandlerId;
+import constant.RequestHandlerId;
 import dispatcher.HandlerDispatcher;
 
 /*
@@ -39,9 +40,10 @@ public class LogicMain {
 	   //配置处理handler
 	   Map<Integer,GameHandler> handleMap=new LinkedHashMap<Integer,GameHandler>();
 	   
-	   handleMap.put(HandlerId.login.ordinal(), new LoginHandler());
-	   handleMap.put(HandlerId.exit.ordinal(), new ExitHandler());
-	 
+	   handleMap.put(RequestHandlerId.login.ordinal(), new LoginHandler());
+	   handleMap.put(RequestHandlerId.exit.ordinal(), new ExitHandler());
+	   handleMap.put(RequestHandlerId.createroom.ordinal(), new CreateRoomHandler());
+	  
 	   handlerdispatcher.setHandlerMap(handleMap);
 	  
 	   //消息分发器开始处理
