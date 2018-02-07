@@ -57,6 +57,7 @@ public class RoomManager {
 	{
 		int roomno=roomnoincreasing.addAndGet(roomnostep);
 		Room room=new Room();
+		room.
 		rooms.put(roomno, room);
 		return roomno;
 	}

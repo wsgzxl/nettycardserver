@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -20,9 +21,32 @@ public class Room {
    
 	private Logger logger=LoggerFactory.getLogger(getClass());
 	
+	private final int maxusers=8;//8个座位
+	
 	private ConcurrentHashMap<Integer,User> users=new ConcurrentHashMap<Integer,User>(); //桌子上的人数
 	
 	private Integer roomno=-1; //桌号
+	
+	private Vector roomindexno=new Vector();//座位管理
+	
+	private Object lockobj=new Object();//lock
+	
+	public Room()
+	{
+		for(int i=0;i<maxusers;i++)
+		{
+	    	roomindexno.add(i);
+		}
+	}
+	
+	/**
+	 * 设置房间号
+	 * @param roomno
+	 */
+	public void setRoomNo(int roomno)
+	{
+		this.roomno=roomno;
+	}
 	
 	/*
 	 * 返回房间号
@@ -80,8 +104,21 @@ public class Room {
 	 */
 	public void addUser(User user)
 	{
+		if(users.size()>maxusers)
+		{
+			logger.info("房间人数已满");
+			return;
+		}
+		
+		synchronized(lockobj)
+		{
+		  //设置座位号
+		  int roomindex=(int) roomindexno.get(roomindexno.size()-1);
+		  user.setRoomIndex(roomindex);
+		}
+		
 		users.put(user.hashCode(), user);
-	
+	    
 	}
 	
 	/**
@@ -91,6 +128,13 @@ public class Room {
 	public void remoUser(User user)
 	{
 		users.remove(users.hashCode());
+		
+		synchronized(lockobj)
+		{
+	    	//回收座位号
+		    roomindexno.add(user.getRoomIndex());
+		}
+		
 	}
 	
 }

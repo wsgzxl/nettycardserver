@@ -26,9 +26,18 @@ public class User {
 	 
 	 private int roomindex=0;//玩家在桌子上的序号
 	 
-	 public int getTableIndex()
+	 public int getRoomIndex()
 	 {
 		 return roomindex;
+	 }
+	 
+	 /**
+	  * 
+	  * @param index
+	  */
+	 public void setRoomIndex(int index)
+	 {
+		 roomindex=index;
 	 }
 	 
 	 private ChannelHandlerContext ctx;//通信管道 
