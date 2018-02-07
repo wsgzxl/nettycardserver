@@ -12,7 +12,9 @@ package constant;
 public enum ResponseHandlerId {
 
      _createroom(128),//创建房间成功
-	 _nofindroom(129);//没有此房间
+	 _nofindroom(129),//没有此房间
+     _addtoroom(130),//添加到房间
+     _leavetoroom(131); //离开房间
      
      private final int value;
      

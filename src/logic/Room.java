@@ -22,7 +22,6 @@ public class Room {
 	
 	private ConcurrentHashMap<Integer,User> users=new ConcurrentHashMap<Integer,User>(); //桌子上的人数
 	
-	
 	private Integer roomno=-1; //桌号
 	
 	/*
@@ -76,12 +75,22 @@ public class Room {
 	}
 	
 	/**
-	 * 添加玩家
+	 * 添加玩家到房间
 	 * @param user
 	 */
 	public void addUser(User user)
 	{
 		users.put(user.hashCode(), user);
+	
+	}
+	
+	/**
+	 * 删除房间的某个人
+	 * @param user
+	 */
+	public void remoUser(User user)
+	{
+		users.remove(users.hashCode());
 	}
 	
 }

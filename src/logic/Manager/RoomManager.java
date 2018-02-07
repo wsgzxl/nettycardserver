@@ -68,29 +68,59 @@ public class RoomManager {
 	 *            房间号
 	 */
 	public void addToRoom(int roomid, User user) {
+		if(roomid==-1 || user==null)
+		{
+			logger.info("加入房间条件不满足: roomid:"+roomid+ "user:"+ user);
+			return;
+		}
 		synchronized (lockobj) {
 			if (rooms.containsKey(roomid)) {
 				rooms.get(roomid).addUser(user);
+				ResponseMessage message=new ResponseMessage(
+					ResponseHandlerId._addtoroom.ordinal(),null);
+				
 			} else {
 				ResponseMessage message = new ResponseMessage(
 						ResponseHandlerId._nofindroom.ordinal(), null);
+				logger.info("未找到房间号:"+roomid);
 				user.getHandlerContext().writeAndFlush(message);
 			}
 		}
 	}
 
+	/**
+	 * 离开房间
+	 * @param roomid
+	 * @param user
+	 */
+	public void leaveToRoom(int roomid,User user)
+	{
+		synchronized (lockobj) {
+			if (rooms.containsKey(roomid)) {
+				rooms.get(roomid).remoUser(user);
+			} else {
+				ResponseMessage message = new ResponseMessage(
+						ResponseHandlerId._nofindroom.ordinal(), null);
+				logger.info("未找到房间号:"+roomid);
+				user.getHandlerContext().writeAndFlush(message);
+			}
+		}
+	}
+	
 	/*
 	 * 解散房间
 	 */
-	public void dissolutionRoom(int roomid) {
+	public void dissolutionRoom(int roomid,User user) {
 		synchronized (lockobj) {
 			if (rooms.containsKey(roomid)) {
 				rooms.remove(roomid);
 			} else {
 				logger.error("异常:未找到房间号" + roomid);
+				ResponseMessage message = new ResponseMessage(
+			    ResponseHandlerId._nofindroom.ordinal(), null);
+				user.getHandlerContext().writeAndFlush(message);
 			}
 		}
 	}
-	
 	
 }

@@ -1,10 +1,12 @@
 package handler;
 
 import logic.Manager.RoomManager;
+import logic.Manager.UserManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.BytesToObject;
 import domain.GameRequest;
 
 /*
@@ -24,7 +26,10 @@ public class AddToRoomHandler implements GameHandler {
 	public void execute(GameRequest paramGameRequest) {
 	    
 		logger.info("AddToRoomHandler is startprocess!");
-	//	RoomManager.getInstance().add
-		
+	    byte[] data=paramGameRequest.GetMessage().getData();
+		BytesToObject bytestoobject=new BytesToObject(data);
+		int roomid=bytestoobject.readInt();
+	    RoomManager.getInstance().addToRoom(roomid, UserManager.getInstance().getUser(paramGameRequest.GetChannelContext()));
+	
 	}
 }

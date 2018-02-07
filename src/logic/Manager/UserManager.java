@@ -1,5 +1,7 @@
 package logic.Manager;
 
+import io.netty.channel.ChannelHandlerContext;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +34,7 @@ public class UserManager {
 	}
 	
 	private ConcurrentHashMap<Integer,User> players=new ConcurrentHashMap<Integer,User>();//所有玩家
+	private ConcurrentHashMap<ChannelHandlerContext,User> cus=new ConcurrentHashMap<ChannelHandlerContext,User>();//玩家的channelcontext,user
 	
 	//发送消息给指定玩家
 	public void sendMessage(User user,ResponseMessage message)
@@ -61,12 +64,24 @@ public class UserManager {
 	public  void addUser(User user)
 	{
 		 players.put(user.hashCode(),user);
+		 cus.put(user.getHandlerContext(),user);
 	}
 	
 	//删除用户
 	public  void removeUser(User user)
 	{
 		players.remove(user.hashCode());
+		cus.remove(user.getHandlerContext());
+	}
+	
+	/**
+	 * 返回玩家的ctx
+	 * @param ctx
+	 * @return
+	 */
+	public User getUser(ChannelHandlerContext ctx)
+	{
+		return cus.get(ctx);
 	}
 	
 	//获取用户数量

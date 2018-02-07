@@ -24,11 +24,11 @@ public class User {
 		 return name;
 	 }
 	 
-	 private int tableindex=0;//玩家在桌子上的序号
+	 private int roomindex=0;//玩家在桌子上的序号
 	 
 	 public int getTableIndex()
 	 {
-		 return tableindex;
+		 return roomindex;
 	 }
 	 
 	 private ChannelHandlerContext ctx;//通信管道 
@@ -44,5 +44,7 @@ public class User {
 	 {
 		 return room;
 	 }
+	 
+	 
 	 
 }
