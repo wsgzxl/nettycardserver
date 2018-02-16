@@ -16,5 +16,7 @@ public enum RequestHandlerId {
 	createroom,//创建房间
 	intoroom,//加入房间
 	leaveroom,//离开房间
+	sitdown,//坐下
+	startgame,//开始游戏
 	
 }

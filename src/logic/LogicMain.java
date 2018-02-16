@@ -3,7 +3,9 @@ package logic;
 import handler.CreateRoomHandler;
 import handler.ExitHandler;
 import handler.GameHandler;
+import handler.LeaverRoomHandler;
 import handler.LoginHandler;
+import handler.SitDownHandler;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
@@ -43,7 +45,9 @@ public class LogicMain {
 	   handleMap.put(RequestHandlerId.login.ordinal(), new LoginHandler());
 	   handleMap.put(RequestHandlerId.exit.ordinal(), new ExitHandler());
 	   handleMap.put(RequestHandlerId.createroom.ordinal(), new CreateRoomHandler());
-	  
+	   handleMap.put(RequestHandlerId.leaveroom.ordinal(),new LeaverRoomHandler());
+	   handleMap.put(RequestHandlerId.sitdown.ordinal(), new SitDownHandler());
+	   
 	   handlerdispatcher.setHandlerMap(handleMap);
 	  
 	   //消息分发器开始处理

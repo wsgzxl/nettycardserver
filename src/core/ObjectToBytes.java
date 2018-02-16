@@ -87,6 +87,25 @@ public class ObjectToBytes {
      }
      
      /**
+      * 写入字符串
+      * @param data
+      * @return
+      */
+     public boolean writeString(String data)
+     {
+    	 try
+    	 {
+    		 byte[] bytes=data.getBytes();
+    		 dataOutputStream.writeInt(data.length());
+    		 dataOutputStream.write(bytes);
+    		 return true;
+    	 }catch(IOException e){
+    		 logger.info("异常信息:"+e);
+    		 return false;
+    	 }
+     }
+     
+     /**
       * 
       * @return
       */

@@ -26,33 +26,33 @@ public class MessageQueue {
 		return this.requestQueue;
 	}
 	
-	public void setRequestQueue(Queue<GameRequest> requestQueue)
+	public synchronized void setRequestQueue(Queue<GameRequest> requestQueue)
 	{
 		this.requestQueue=requestQueue;
 	}
 	
-	public void clear()
+	public synchronized void clear()
 	{
 		this.requestQueue.clear();
 		this.requestQueue=null;
 	}
 	
-	public int size()
+	public synchronized int size()
 	{
 		return this.requestQueue!=null?this.requestQueue.size():0;
 	}
 	
-	public boolean add(GameRequest request)
+	public synchronized boolean add(GameRequest request)
 	{
 		return this.requestQueue.add(request);
 	}
 	
-	public void setRunning(boolean running)
+	public synchronized void setRunning(boolean running)
 	{
 		this.running=running;
 	}
 	
-	public boolean isRunning()
+	public  synchronized boolean isRunning()
 	{
 		return this.running;
 	}

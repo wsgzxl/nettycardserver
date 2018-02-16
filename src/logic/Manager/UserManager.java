@@ -39,7 +39,7 @@ public class UserManager {
 	//发送消息给指定玩家
 	public void sendMessage(User user,ResponseMessage message)
 	{
-		user.getHandlerContext().writeAndFlush(message);
+		user.Send(message);
 	}
 	
 	//发送消息给多个玩家
@@ -47,7 +47,7 @@ public class UserManager {
 	{
 		for(int i=0;i<users.length;i++)
 		{
-			users[i].getHandlerContext().writeAndFlush(message);
+			users[i].Send(message);
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class UserManager {
 	{
 		for(User user : players.values())
 		{
-	    	user.getHandlerContext().writeAndFlush(message);
+	    	user.Send(message);
 	    }
 	}
 	

@@ -1,5 +1,9 @@
 package logic;
 
+import constant.ResponseHandlerId;
+import core.ObjectToBytes;
+import net.ResponseMessage;
+import logic.Enums.SitDownAndUp;
 import io.netty.channel.ChannelHandlerContext;
 
 
@@ -40,6 +44,18 @@ public class User {
 		 roomindex=index;
 	 }
 	 
+	 private SitDownAndUp sitdown;
+	 
+	 public SitDownAndUp getSitDownState()
+	 {
+		 return sitdown;
+	 }
+	 
+	 public void setSitDownState(SitDownAndUp state)
+	 {
+		 this.sitdown=state;
+	 }
+	 
 	 private ChannelHandlerContext ctx;//通信管道 
 	 
 	 public ChannelHandlerContext getHandlerContext()
@@ -54,6 +70,28 @@ public class User {
 		 return room;
 	 }
 	 
+	 /**
+	  * 获取游戏开始前数据
+	  */
+	 public ResponseMessage getBeforeGameMessage()
+	 {
+		 ObjectToBytes objecttobytes=new ObjectToBytes();
+		 objecttobytes.writeInt(getId());
+		 objecttobytes.writeString(getName());
+		 objecttobytes.writeInt(getRoomIndex());
+		 return new ResponseMessage(ResponseHandlerId._beforegame.ordinal(),objecttobytes.getBytes());
+	 }
+	 
+	 /**
+	  * 发送数据
+	  * @param message
+	  */
+	 public void Send(ResponseMessage message)
+	 {
+		 ctx.writeAndFlush(message);
+	 }
+	 
+	
 	 
 	 
 }

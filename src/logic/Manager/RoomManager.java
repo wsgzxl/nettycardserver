@@ -15,6 +15,7 @@ import constant.ResponseHandlerId;
 import core.ObjectToBytes;
 import logic.Room;
 import logic.User;
+import logic.Enums.SitDownAndUp;
 
 /*
 @author YHL
@@ -56,8 +57,7 @@ public class RoomManager {
 	public int createRoom()
 	{
 		int roomno=roomnoincreasing.addAndGet(roomnostep);
-		Room room=new Room();
-		room.
+		Room room=new Room(roomno);
 		rooms.put(roomno, room);
 		return roomno;
 	}
@@ -69,6 +69,7 @@ public class RoomManager {
 	 *            房间号
 	 */
 	public void addToRoom(int roomid, User user) {
+		
 		if(roomid==-1 || user==null)
 		{
 			logger.info("加入房间条件不满足: roomid:"+roomid+ "user:"+ user);
@@ -77,6 +78,7 @@ public class RoomManager {
 		synchronized (lockobj) {
 			if (rooms.containsKey(roomid)) {
 				rooms.get(roomid).addUser(user);
+				
 				ResponseMessage message=new ResponseMessage(
 					ResponseHandlerId._addtoroom.ordinal(),null);
 				
@@ -84,7 +86,7 @@ public class RoomManager {
 				ResponseMessage message = new ResponseMessage(
 						ResponseHandlerId._nofindroom.ordinal(), null);
 				logger.info("未找到房间号:"+roomid);
-				user.getHandlerContext().writeAndFlush(message);
+				user.Send(message);
 			}
 		}
 	}
@@ -99,11 +101,12 @@ public class RoomManager {
 		synchronized (lockobj) {
 			if (rooms.containsKey(roomid)) {
 				rooms.get(roomid).remoUser(user);
+				
 			} else {
 				ResponseMessage message = new ResponseMessage(
 						ResponseHandlerId._nofindroom.ordinal(), null);
 				logger.info("未找到房间号:"+roomid);
-				user.getHandlerContext().writeAndFlush(message);
+				user.Send(message);
 			}
 		}
 	}
@@ -119,7 +122,7 @@ public class RoomManager {
 				logger.error("异常:未找到房间号" + roomid);
 				ResponseMessage message = new ResponseMessage(
 			    ResponseHandlerId._nofindroom.ordinal(), null);
-				user.getHandlerContext().writeAndFlush(message);
+				user.Send(message);
 			}
 		}
 	}

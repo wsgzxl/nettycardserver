@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 
+import logic.Enums.SitDownAndUp;
 import logic.Manager.RoomManager;
+import logic.Manager.UserManager;
 import net.ResponseMessage;
 
 import org.slf4j.Logger;
@@ -34,7 +36,11 @@ public class CreateRoomHandler implements GameHandler{
 	    
 		logger.info("CreateRoom is startprocess!");
 		int roomid=RoomManager.getInstance().createRoom();
-	    ObjectToBytes objecttobytes=new ObjectToBytes();
+	  
+		//创建房间的用户默认坐下
+		UserManager.getInstance().getUser(paramGameRequest.GetChannelContext()).setSitDownState(SitDownAndUp.down);
+	    
+		ObjectToBytes objecttobytes=new ObjectToBytes();
 	    objecttobytes.writeInt(ResponseHandlerId._createroom.ordinal());
 	    objecttobytes.writeInt(roomid);
 		ResponseMessage responsemessage=new ResponseMessage(ResponseHandlerId._createroom.ordinal(),objecttobytes.getBytes());

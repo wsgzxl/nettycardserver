@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import logic.Enums.SitDownAndUp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,14 +33,18 @@ public class Room {
 	
 	private Vector roomindexno=new Vector();//座位管理
 	
-	private Object lockobj=new Object();//lock
+	private ReentrantLock lockobj=new ReentrantLock();//锁
 	
-	public Room()
+	private boolean isstartgame=false;//是否开始游戏
+	
+	public Room(int roomindex)
 	{
 		for(int i=0;i<maxusers;i++)
 		{
 	    	roomindexno.add(i);
 		}
+		setRoomNo(roomindex);
+		isstartgame=false;
 	}
 	
 	/**
@@ -61,13 +69,7 @@ public class Room {
 	 */
 	public void sendToUser(User user,ResponseMessage message)
 	{
-		ChannelHandlerContext ctx=user.getHandlerContext();
-		if(null==ctx)
-		{
-			logger.info("ctx is error!");
-			return;
-		}
-		user.getHandlerContext().writeAndFlush(message);
+	    user.Send(message);
 	}
 	
 	/*
@@ -77,13 +79,7 @@ public class Room {
 	{
 		for(int i=0;i<users.length;i++)
 		{
-			ChannelHandlerContext ctx=users[i].getHandlerContext();
-			if(null==ctx)
-			{
-				logger.error("ctx is error!");
-				return;
-			}
-			ctx.writeAndFlush(message);
+			users[i].Send(message);
 		}
 	}
 	
@@ -94,7 +90,7 @@ public class Room {
 	{
 		for(User user:users.values())
 		{
-			user.getHandlerContext().writeAndFlush(message);
+			user.Send(message);
 		}
 	}
 	
@@ -107,33 +103,59 @@ public class Room {
 		if(users.size()>maxusers)
 		{
 			logger.info("房间人数已满");
+			
 			return;
 		}
 		
-		synchronized(lockobj)
+		lockobj.lock();
 		{
+		  int lastindex=roomindexno.size()-1;
 		  //设置座位号
-		  int roomindex=(int) roomindexno.get(roomindexno.size()-1);
+		  int roomindex=(int) roomindexno.get(lastindex);
 		  user.setRoomIndex(roomindex);
+		  roomindexno.remove(lastindex);
 		}
-		
+		lockobj.unlock();
+
 		users.put(user.hashCode(), user);
 	    
+		for(int i=0;i<users.size();i++)
+		{
+			for(int j=0;j<users.size();j++)
+			{
+		    	users.get(j).Send(users.get(i).getBeforeGameMessage());
+			}
+		}
+		
 	}
 	
 	/**
-	 * 删除房间的某个人
+	 * 离开房间
 	 * @param user
 	 */
 	public void remoUser(User user)
 	{
+		
 		users.remove(users.hashCode());
 		
-		synchronized(lockobj)
+		lockobj.lock();
 		{
 	    	//回收座位号
 		    roomindexno.add(user.getRoomIndex());
 		}
+		
+		user.setSitDownState(SitDownAndUp.up);//设置状态为站起
+		
+		lockobj.unlock();
+	}
+
+    /**
+     * 开始游戏
+     */
+	public void startGame()
+	{
+		
+		isstartgame=true;
 		
 	}
 	
