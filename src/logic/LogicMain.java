@@ -34,7 +34,7 @@ public class LogicMain {
 	   return handlerdispatcher;
    }
    
-   private static LogicMain _instance;
+   private static LogicMain _instance=new LogicMain();;
 	
    private LogicMain()
    {
@@ -59,10 +59,6 @@ public class LogicMain {
    
    public static LogicMain getInstance()
    {
-	   if(_instance==null)
-	   {
-		   _instance=new LogicMain();
-	   }
 	   return _instance;
    }
    

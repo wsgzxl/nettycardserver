@@ -10,6 +10,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
+import logic.User;
+import logic.Manager.UserManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +34,6 @@ public class HandlerDispatcher implements Runnable {
 	
     private  final Logger logger=LoggerFactory.getLogger(getClass());
 	
-    private  ConcurrentHashMap<Integer,MessageQueue> sessionMsgQ=null;
-    
     //线程
     private Executor messageExecutor;
     
@@ -47,7 +48,7 @@ public class HandlerDispatcher implements Runnable {
     
     public HandlerDispatcher()
     {
-    	this.sessionMsgQ=new ConcurrentHashMap<Integer,MessageQueue>();
+    	
     	this.running=true;
     	this.sleepTime=200L;
     	
@@ -73,54 +74,6 @@ public class HandlerDispatcher implements Runnable {
     	this.sleepTime=sleepTime;
     }
     
-    /*
-     * 为链接添加消息队列
-     */
-    
-    public void addMessageQueue(ChannelHandlerContext channel,MessageQueue messageQueue){
-    	this.sessionMsgQ.put(channel.hashCode(), messageQueue);
-    }
-    
-    /*
-     * 为链接删除消息队列
-     */
-    public void removeMessageQueue(ChannelHandlerContext channel)
-    {
-    	MessageQueue queue=(MessageQueue)this.sessionMsgQ.remove(channel.handler());
-    	if(queue!=null)
-    	{
-    		queue.clear();
-    		queue=null;
-    	}
-    }
-    
-    /*
-     * 添加消息
-     */
-    
-    public void addMessage(GameRequest request)
-    {
-    	try
-    	{
-    		MessageQueue messageQueue=(MessageQueue)this.sessionMsgQ
-    				.get(Integer.valueOf(request.GetChannelContext().hashCode()));
-    		if(messageQueue==null)
-    		{
-    			messageQueue=new MessageQueue();
-    			sessionMsgQ.put(Integer.valueOf(request.GetChannelContext().hashCode()),messageQueue);
-    		    messageQueue.add(request);
-    		}
-    		else
-    		{
-    			messageQueue.add(request);
-    		}
-    	}
-    	catch(Exception ex)
-    	{
-    		logger.error("异常信息:"+ex);
-    	}
-    }
-    
 	@Override
 	public void run() {
 	   
@@ -128,22 +81,22 @@ public class HandlerDispatcher implements Runnable {
 		{
 			try
 			{
-				for(MessageQueue messageQueue:sessionMsgQ.values())
+				for(User user:UserManager.getInstance().getUser().values())
 				{
+					MessageQueue messageQueue=user.getMessageQueue();
 					if((messageQueue!=null) && (messageQueue.size()>0) && (!messageQueue.isRunning()))
 					{
 						MessageWorker messageWorker=new MessageWorker(messageQueue);
 						if(this.messageExecutor!=null)
 						{
 						    this.messageExecutor.execute(messageWorker);
-						    messageQueue.setRunning(true);
 						}
 						else
 						{
 							logger.info("messageExecutor is null!");
 						}
-	
 					}
+					//logger.info("队列长度:"+user.getMessageQueue().size()+"running:"+messageQueue.isRunning());
 				}
 			}catch(Exception ex)
 			{

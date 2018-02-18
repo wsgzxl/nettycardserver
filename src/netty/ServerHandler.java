@@ -3,6 +3,8 @@ package netty;
 import java.sql.Date;
 
 import logic.LogicMain;
+import logic.User;
+import logic.Manager.UserManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -30,8 +32,12 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 		try
 		{
 		super.handlerAdded(ctx);
-
-		LogicMain.getInstance().getDispatcher().addMessageQueue(ctx,new MessageQueue());
+        
+		//进入后先构造一个user对象
+		User user=new User();
+		user.setChannelHandler(ctx);
+		UserManager.getInstance().addUser(user);
+		
 		
 		logger.info("进来了一个连接:"+ctx.channel().id().toString());
 		
@@ -49,8 +55,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 	    
 		   super.handlerRemoved(ctx);
 	       
-		   //删除此链接的消息队列
-		   LogicMain.getInstance().getDispatcher().removeMessageQueue(ctx);
+		   //删除此链接的消息队列,但是不删除用户，是为了这个用户自动重连
+		   UserManager.getInstance().removeMessageQueue(ctx);
+		   //删除
+		   UserManager.getInstance().removeUser(ctx);
 		   
 		   logger.info("删除了一个连接:"+ctx.channel().id().toString());
 		
@@ -69,7 +77,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 		RequestMessage message=(RequestMessage)msg;
 		logger.info("reciver data:"+message.toString());	
 		
-		LogicMain.getInstance().getDispatcher().addMessage(new GameRequest(ctx,message));
+		UserManager.getInstance().addMessageQueue(ctx, new GameRequest(ctx,message));
 		
 		
 	/*	ResponseMessage m=new ResponseMessage(1000,new byte[]{0xc,0xd});
@@ -103,9 +111,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 	{
 		try
 		{
+	
 		logger.info(ctx.channel().id()+"异常断开");
 	    cause.printStackTrace();
-		ctx.close();
+		
+	    ctx.close();
+	 
+		//删除此链接的消息队列,但是不删除用户，是为了这个用户自动重连
+        UserManager.getInstance().removeMessageQueue(ctx);
+		
 		}
 		catch(Exception ex)
 		{

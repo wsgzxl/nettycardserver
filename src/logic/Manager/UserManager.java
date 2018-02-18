@@ -4,12 +4,15 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import domain.GameRequest;
+import domain.MessageQueue;
 import net.ResponseMessage;
 import logic.User;
 
@@ -23,9 +26,13 @@ public class UserManager {
 	
 	private static UserManager _instance=new UserManager();//防止并发带来的锁，所以直接new
 	
+	private ConcurrentHashMap<Integer,User> players=new ConcurrentHashMap<Integer,User>();//所有玩家
+	
+	private ConcurrentHashMap<ChannelHandlerContext,User> cus=new ConcurrentHashMap<ChannelHandlerContext,User>();//玩家的channelcontext,user
+	
 	private UserManager()
 	{
-		
+	
 	}
 	
 	public static UserManager getInstance()
@@ -33,8 +40,13 @@ public class UserManager {
 		return _instance;
 	}
 	
-	private ConcurrentHashMap<Integer,User> players=new ConcurrentHashMap<Integer,User>();//所有玩家
-	private ConcurrentHashMap<ChannelHandlerContext,User> cus=new ConcurrentHashMap<ChannelHandlerContext,User>();//玩家的channelcontext,user
+	/**
+	 * 获取所有的用户
+	 * @return
+	 */
+	public Map<Integer,User> getUser(){
+		return players;
+	}
 	
 	//发送消息给指定玩家
 	public void sendMessage(User user,ResponseMessage message)
@@ -90,4 +102,38 @@ public class UserManager {
 		return players.size();
 	}
 	
+    /*
+     * 为链接添加消息队列
+     */
+    
+    public void addMessageQueue(ChannelHandlerContext channel,GameRequest request){
+        User user=cus.get(channel);
+        if(user!=null){
+        	  user.addMessage(request);
+        }else{
+        	logger.info("user==null");
+        }
+    }
+    
+    /*
+     * 为链接删除消息队列
+     */
+    public void removeMessageQueue(ChannelHandlerContext channel)
+    {
+    	User user=cus.get(channel);
+    	if(user!=null){
+    	   user.clearQueue();
+    	}
+    }
+    
+    /*
+     * 删除这个用户
+     */
+    public void removeUser(ChannelHandlerContext ctx){
+    	User user=cus.remove(ctx);
+    	if(user!=null){
+    		players.remove(user);
+    	}
+    }
+    
 }

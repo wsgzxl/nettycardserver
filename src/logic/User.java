@@ -1,7 +1,14 @@
 package logic;
 
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import constant.ResponseHandlerId;
 import core.ObjectToBytes;
+import domain.GameRequest;
+import domain.MessageQueue;
 import net.ResponseMessage;
 import logic.Enums.SitDownAndUp;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,7 +21,9 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class User {
    
-	 private int weixinid=-1;//玩家微信ID
+	 private Logger logger=LoggerFactory.getLogger(getClass());
+	
+	private int weixinid=-1;//玩家微信ID
 	 
 	 public int getId()
 	 {
@@ -63,6 +72,20 @@ public class User {
 		 return ctx;
 	 }
 	 
+	 /**
+	  * 设置通信管道
+	  * @param ctx
+	  */
+	 public void setChannelHandler(ChannelHandlerContext ctx){
+		 this.ctx=ctx;
+	 }
+	
+	 private MessageQueue messagequeue=new MessageQueue();//每个用户的消息队列
+	 
+	 public MessageQueue getMessageQueue(){
+		 return messagequeue;
+	 }
+	 
 	 private Room room=null;//玩家所在房间
 	 
 	 public Room getRoom()
@@ -91,7 +114,26 @@ public class User {
 		 ctx.writeAndFlush(message);
 	 }
 	 
-	
+	 /*
+	  * 添加消息
+	  */
+	   public void addMessage(GameRequest request)
+	   {
+	       messagequeue.add(request);
+	   }
+	 
+	   /**
+	    * 清空队列
+	    */
+	   public void clearQueue(){
+		   if(messagequeue!=null){
+			   messagequeue.clear();
+			   messagequeue=null;
+		   }
+		   else{
+			   logger.info("队列为null");
+		   }
+	   }
 	 
 	 
 }
