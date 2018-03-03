@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class MessageQueue {
     
 	private Queue<GameRequest> requestQueue=null;
-	private  boolean running=false;
+	private volatile boolean running=false;
 	
 	public MessageQueue()
 	{
@@ -42,12 +42,12 @@ public class MessageQueue {
 		return this.requestQueue.add(request);
 	}
 	
-	public synchronized void setRunning(boolean running)
+	public void setRunning(boolean running)
 	{
 		this.running=running;
 	}
 	
-	public  synchronized boolean isRunning()
+	public  boolean isRunning()
 	{
 		return this.running;
 	}

@@ -40,6 +40,9 @@ public class HandlerDispatcher implements Runnable {
     //消息分发
     private Map<Integer,GameHandler> handleMap=null;
     
+    //消息队列
+    private MessageQueue messageQueue=new MessageQueue();
+    
     //是否在运行
     private boolean running;
     
@@ -74,6 +77,13 @@ public class HandlerDispatcher implements Runnable {
     	this.sleepTime=sleepTime;
     }
     
+    /*添加消息
+     * 
+     */
+    public void addMessage(GameRequest request){
+    	messageQueue.add(request);
+    }
+    
 	@Override
 	public void run() {
 	   
@@ -81,9 +91,6 @@ public class HandlerDispatcher implements Runnable {
 		{
 			try
 			{
-				for(User user:UserManager.getInstance().getUser().values())
-				{
-					MessageQueue messageQueue=user.getMessageQueue();
 					if((messageQueue!=null) && (messageQueue.size()>0) && (!messageQueue.isRunning()))
 					{
 						MessageWorker messageWorker=new MessageWorker(messageQueue);
@@ -95,8 +102,6 @@ public class HandlerDispatcher implements Runnable {
 						{
 							logger.info("messageExecutor is null!");
 						}
-					}
-					//logger.info("队列长度:"+user.getMessageQueue().size()+"running:"+messageQueue.isRunning());
 				}
 			}catch(Exception ex)
 			{

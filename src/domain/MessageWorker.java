@@ -35,9 +35,7 @@ public class MessageWorker implements Runnable {
 		} catch (Exception ex) {
 			logger.error("“Ï≥£–≈œ¢:" + ex);
 		} finally {
-		//	synchronized (messageQueue) {
-				this.messageQueue.setRunning(false);
-		//	}
+			this.messageQueue.setRunning(false);
 		}
 	}
 

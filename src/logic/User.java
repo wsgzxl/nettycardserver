@@ -80,12 +80,6 @@ public class User {
 		 this.ctx=ctx;
 	 }
 	
-	 private MessageQueue messagequeue=new MessageQueue();//每个用户的消息队列
-	 
-	 public MessageQueue getMessageQueue(){
-		 return messagequeue;
-	 }
-	 
 	 private Room room=null;//玩家所在房间
 	 
 	 public Room getRoom()
@@ -113,27 +107,5 @@ public class User {
 	 {
 		 ctx.writeAndFlush(message);
 	 }
-	 
-	 /*
-	  * 添加消息
-	  */
-	   public void addMessage(GameRequest request)
-	   {
-	       messagequeue.add(request);
-	   }
-	 
-	   /**
-	    * 清空队列
-	    */
-	   public void clearQueue(){
-		   if(messagequeue!=null){
-			   messagequeue.clear();
-			   messagequeue=null;
-		   }
-		   else{
-			   logger.info("队列为null");
-		   }
-	   }
-	 
 	 
 }

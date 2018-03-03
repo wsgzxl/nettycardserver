@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dispatcher.HandlerDispatcher;
 import domain.GameRequest;
 import domain.MessageQueue;
 import net.ResponseMessage;
@@ -29,6 +30,8 @@ public class UserManager {
 	private ConcurrentHashMap<Integer,User> players=new ConcurrentHashMap<Integer,User>();//所有玩家
 	
 	private ConcurrentHashMap<ChannelHandlerContext,User> cus=new ConcurrentHashMap<ChannelHandlerContext,User>();//玩家的channelcontext,user
+	
+	private HandlerDispatcher handlerDispatcher;
 	
 	private UserManager()
 	{
@@ -102,28 +105,30 @@ public class UserManager {
 		return players.size();
 	}
 	
+	/*
+	 * 设置消息处理器
+	 */
+	public void setHandlerDispatcher(HandlerDispatcher handlerDispatcher){
+		this.handlerDispatcher=handlerDispatcher;
+	}
+	
     /*
      * 为链接添加消息队列
      */
     
-    public void addMessageQueue(ChannelHandlerContext channel,GameRequest request){
-        User user=cus.get(channel);
-        if(user!=null){
-        	  user.addMessage(request);
-        }else{
-        	logger.info("user==null");
-        }
+    public void addMessageQueue(GameRequest request){
+       if(null!=this.handlerDispatcher){
+    	   this.handlerDispatcher.addMessage(request);
+       }
     }
     
     /*
      * 为链接删除消息队列
      */
-    public void removeMessageQueue(ChannelHandlerContext channel)
+    private void removeMessageQueue(ChannelHandlerContext channel)
     {
-    	User user=cus.get(channel);
-    	if(user!=null){
-    	   user.clearQueue();
-    	}
+    	//TODO当链接断开的时候清空队列
+    	
     }
     
     /*

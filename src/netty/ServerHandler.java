@@ -56,7 +56,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 		   super.handlerRemoved(ctx);
 	       
 		   //删除此链接的消息队列,但是不删除用户，是为了这个用户自动重连
-		   UserManager.getInstance().removeMessageQueue(ctx);
+		   //UserManager.getInstance().removeMessageQueue(ctx);
+		   
 		   //删除
 		   UserManager.getInstance().removeUser(ctx);
 		   
@@ -77,7 +78,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 		RequestMessage message=(RequestMessage)msg;
 		logger.info("reciver data:"+message.toString());	
 		
-		UserManager.getInstance().addMessageQueue(ctx, new GameRequest(ctx,message));
+		UserManager.getInstance().addMessageQueue(new GameRequest(ctx,message));
 		
 		
 	/*	ResponseMessage m=new ResponseMessage(1000,new byte[]{0xc,0xd});
@@ -118,7 +119,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 	    ctx.close();
 	 
 		//删除此链接的消息队列,但是不删除用户，是为了这个用户自动重连
-        UserManager.getInstance().removeMessageQueue(ctx);
+        //UserManager.getInstance().removeMessageQueue(ctx);
 		
 		}
 		catch(Exception ex)
