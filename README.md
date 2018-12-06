@@ -1,8 +1,8 @@
 ﻿# nettycardserver
 斗牛服务端，采用netty做为通信框架。
-我是棋牌服务器初学者，欢迎大家相互交流，主要学一些高并发方面的技术。
+欢迎大家相互交流，主要学一些高并发方面的技术。
 需求文档在docs文件夹里面。
-我的QQ:1357098586，一起学习。
+我的QQ:1357098586。
 
 我的netty+cocoscreator 一步一步开发斗地主教学地址：     http://www.cnblogs.com/alongu3d/p/9897565.html
 
