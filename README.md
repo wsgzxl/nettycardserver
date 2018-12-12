@@ -11,7 +11,7 @@
 
 截图：
 
-![游戏中]<img>https://github.com/wsgzxl/nettycardserver/blob/master/1.png</img>
+![游戏中][IMGAGE]https://github.com/wsgzxl/nettycardserver/blob/master/1.png
 
 ![加入房间，创建房间]https://github.com/wsgzxl/nettycardserver/blob/master/2.png
 
