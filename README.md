@@ -8,3 +8,10 @@
 
 
 后续采用https://github.com/wsgzxl/nettycardv2.git 站点，采用maven构建项目，protobuf通信协议！
+
+截图：
+
+![游戏中]https://github.com/wsgzxl/nettycardserver/blob/master/1.png
+
+![加入房间，创建房间]https://github.com/wsgzxl/nettycardserver/blob/master/2.png
+
